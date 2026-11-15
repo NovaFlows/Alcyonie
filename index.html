@@ -6,12 +6,9 @@
 <title>Alcyonie · Relation d’aide, relaxation et massage amma assis en région lilloise</title>
 <meta name="description" content="Céline Delohen, relation d’aide, relaxation, massage amma assis, écriture créative et danse assise. Cabinets à Marquette-lez-Lille et Saint-André-lez-Lille, ateliers en EHPAD, collectivités, associations et entreprises.">
 <meta name="theme-color" content="#FAFAF6">
-<!-- À activer une fois le nom de domaine choisi (remplacer VOTRE-DOMAINE.fr) :
-<link rel="canonical" href="https://www.VOTRE-DOMAINE.fr/">
-<meta property="og:url" content="https://www.VOTRE-DOMAINE.fr/">
-<meta property="og:image" content="https://www.VOTRE-DOMAINE.fr/assets/partage.jpg">
--->
-<meta property="og:image" content="assets/partage.jpg">
+<link rel="canonical" href="https://www.alcyonie.fr/">
+<meta property="og:url" content="https://www.alcyonie.fr/">
+<meta property="og:image" content="https://www.alcyonie.fr/assets/partage.jpg">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="fr_FR">
 <meta property="og:site_name" content="Alcyonie">
@@ -589,6 +586,10 @@ button.link-arrow{background:none;border:0;padding:0;font:inherit;font-weight:60
 .foot-col a:hover{text-decoration:underline;text-underline-offset:4px}
 .foot-col address{color:var(--on-deep-soft);font-size:.95rem;line-height:1.55;padding-block:6px}
 .foot-bottom{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 24px;margin-top:clamp(48px,6vw,80px);padding-top:24px;border-top:1px solid var(--on-deep-line);font-size:.88rem;color:var(--on-deep-soft)}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+#dlg-legal li a{color:var(--leaf-deep,inherit);text-decoration:underline;text-underline-offset:3px}
+.foot-bottom .credit a{color:inherit;text-decoration:underline;text-decoration-color:var(--on-deep-line);text-underline-offset:3px;transition:color .2s,text-decoration-color .2s}
+.foot-bottom .credit a:hover,.foot-bottom .credit a:focus-visible{color:#fff;text-decoration-color:currentColor}
 .foot-bottom .legal{display:flex;flex-wrap:wrap;gap:4px 20px}
 button.lnk{background:none;border:0;padding:0;font:inherit;color:inherit;cursor:pointer;text-decoration:underline;text-underline-offset:4px;text-decoration-color:var(--on-deep-line);min-height:36px}
 button.lnk:hover{text-decoration-color:currentColor}
@@ -1358,6 +1359,7 @@ dialog::backdrop{background:var(--backdrop)}
     </div>
     <div class="foot-bottom">
       <span>© 2026 Alcyonie · Céline Delohen · SIRET <span data-text="siret">991 347 006 00017</span></span>
+      <span class="credit">Site réalisé par <a href="https://www.novaflows.fr/" target="_blank" rel="noopener">NovaFlows<span class="sr-only"> (s’ouvre dans un nouvel onglet)</span></a></span>
       <span class="legal">
         <button class="lnk" type="button" data-dialog="dlg-legal">Mentions légales</button>
         <button class="lnk" type="button" data-dialog="dlg-privacy">Confidentialité</button>
@@ -1398,7 +1400,8 @@ dialog::backdrop{background:var(--backdrop)}
       <li><span>Adresse professionnelle (siège)</span><span>Lambersart <span class="todo">Adresse complète à compléter</span></span></li>
       <li><span>Contact</span><span>contact.alcyonie@gmail.com</span></li>
       <li><span>Directrice de la publication</span><span class="todo">À confirmer</span></li>
-      <li><span>Hébergeur (nom, adresse, téléphone)</span><span class="todo">À compléter</span></li>
+      <li><span>Conception du site</span><span><a href="https://www.novaflows.fr/" target="_blank" rel="noopener">NovaFlows</a></span></li>
+      <li><span>Hébergeur</span><span>Netlify, Inc., 101 2nd Street, San Francisco, CA 94105, États-Unis (netlify.com)</span></li>
     </ul>
   </div>
 </dialog>
