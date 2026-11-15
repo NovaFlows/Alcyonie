@@ -544,7 +544,7 @@ button.link-arrow{background:none;border:0;padding:0;font:inherit;font-weight:60
 @media (max-width:860px){.contact-grid{grid-template-columns:1fr}}
 @media (max-width:520px){.vcard{--vr:90px 220px}.vpanel{padding-left:30px;padding-right:18px}.vlist .ic{display:none}.vlist li{grid-template-columns:minmax(0,1fr) auto;gap:12px}}
 
-/* Préparateur de message (mailto) */
+/* Formulaire de contact (envoi par Netlify Forms) */
 .composer{display:grid;gap:22px;padding:clamp(4px,1vw,12px) 0}
 .composer h3{font-size:clamp(1.5rem,1.3rem + .8vw,1.9rem)}
 .composer .hint{color:var(--ink-soft);font-size:.95rem;max-width:48ch}
@@ -570,6 +570,17 @@ button.link-arrow{background:none;border:0;padding:0;font:inherit;font-weight:60
 .actions .btn{padding:0 22px}
 .fine{font-size:.85rem;color:var(--ink-soft);max-width:52ch}
 .status{min-height:1.3em;font-size:.9rem;font-weight:600;color:var(--leaf-text)}
+.status.err{color:var(--wine)}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.field .opt{text-transform:none;letter-spacing:0;font-weight:500}
+.field input[aria-invalid="true"],.field textarea[aria-invalid="true"]{border-color:var(--wine)}
+.consent{display:flex;gap:12px;align-items:flex-start;font-size:.92rem;line-height:1.5;color:var(--ink-soft);cursor:pointer}
+.consent input{flex:none;width:22px;height:22px;margin:1px 0 0;accent-color:var(--wine);cursor:pointer}
+.consent .lnk-in{background:none;border:0;padding:0;font:inherit;color:var(--ink);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.composer .btn[disabled]{opacity:.65;cursor:progress}
+.thanks{display:grid;gap:14px;padding:clamp(4px,1vw,12px) 0}
+.thanks h3{font-size:clamp(1.5rem,1.3rem + .8vw,1.9rem)}
+.thanks:focus{outline:none}
 
 /* ---------- Pied de page ---------- */
 .site-footer{background:var(--deep);color:var(--on-deep);padding-top:clamp(64px,8vw,104px);padding-bottom:calc(32px + env(safe-area-inset-bottom,0px))}
@@ -1272,11 +1283,14 @@ dialog::backdrop{background:var(--backdrop)}
       </div>
     </div>
 
-    <!-- Préparer un e-mail : rien n’est envoyé par le site -->
-    <form class="composer" id="composer" data-reveal style="--d:.12s" novalidate>
+    <!-- Formulaire de contact : transmis par Netlify Forms, notification par e-mail à Céline -->
+    <form class="composer" id="composer" name="contact" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field" data-reveal style="--d:.12s" novalidate>
+      <input type="hidden" name="form-name" value="contact">
+      <input type="hidden" name="subject" id="c-subject" value="Alcyonie · Autre question">
+      <p class="hp" aria-hidden="true"><label>Ne pas remplir : <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
       <div style="display:grid;gap:10px">
-        <h3>Préparer votre message</h3>
-        <p class="hint">Choisissez votre demande, écrivez quelques mots, puis ouvrez le message dans votre messagerie pour l’envoyer.</p>
+        <h3>Écrire à Céline</h3>
+        <p class="hint">Choisissez votre demande et écrivez quelques mots : votre message est transmis directement à Céline, qui vous répondra.</p>
       </div>
       <fieldset>
         <legend>Votre demande concerne</legend>
@@ -1305,16 +1319,23 @@ dialog::backdrop{background:var(--backdrop)}
         <input id="c-identite" name="identite" type="text" autocomplete="name" placeholder="Nom et prénom">
       </div>
       <div class="field">
+        <label class="f" for="c-email">Votre e-mail</label>
+        <input id="c-email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="prenom.nom@exemple.fr">
+      </div>
+      <div class="field">
+        <label class="f" for="c-tel">Votre téléphone <span class="opt">(à la place ou en plus de l’e-mail)</span></label>
+        <input id="c-tel" name="telephone" type="tel" autocomplete="tel" inputmode="tel" placeholder="06 00 00 00 00">
+      </div>
+      <div class="field">
         <label class="f" for="c-message">Votre message</label>
         <textarea id="c-message" name="message" placeholder="Bonjour Céline, je souhaiterais…"></textarea>
       </div>
-      <p class="subject-preview" aria-live="polite">Objet&nbsp;: <b id="composer-subject">Alcyonie · Autre question</b></p>
+      <label class="consent"><input type="checkbox" name="consentement" id="c-consent" value="oui"><span>J’accepte que ces informations soient transmises à Céline Delohen pour répondre à ma demande. <button class="lnk-in" type="button" data-dialog="dlg-privacy">En savoir plus</button></span></label>
       <div class="actions">
-        <a class="btn btn-primary" id="composer-send" href="mailto:contact.alcyonie@gmail.com"><svg class="i"><use href="#i-mail"/></svg>Ouvrir dans ma messagerie</a>
-        <button class="btn btn-ghost" type="button" id="composer-copy"><svg class="i"><use href="#i-copy"/></svg>Copier le message</button>
+        <button class="btn btn-primary" type="submit" id="composer-submit"><svg class="i"><use href="#i-mail"/></svg><span>Envoyer ma demande</span></button>
+        <a class="btn btn-ghost" id="composer-send" href="mailto:contact.alcyonie@gmail.com">Écrire depuis ma messagerie</a>
       </div>
       <p class="status" id="composer-status" role="status" aria-live="polite"></p>
-      <p class="fine">Ce formulaire n’envoie rien et n’enregistre rien&nbsp;: il prépare un e-mail que vous envoyez vous-même depuis votre messagerie.</p>
     </form>
   </div>
 </section>
@@ -1399,7 +1420,7 @@ dialog::backdrop{background:var(--backdrop)}
       <li><span>Statut juridique</span><span>Entrepreneure individuelle (micro-entreprise)</span></li>
       <li><span>Adresse professionnelle (siège)</span><span>Lambersart <span class="todo">Adresse complète à compléter</span></span></li>
       <li><span>Contact</span><span>contact.alcyonie@gmail.com</span></li>
-      <li><span>Directrice de la publication</span><span class="todo">À confirmer</span></li>
+      <li><span>Directrice de la publication</span><span>Céline Delohen</span></li>
       <li><span>Conception du site</span><span><a href="https://www.novaflows.fr/" target="_blank" rel="noopener">NovaFlows</a></span></li>
       <li><span>Hébergeur</span><span>Netlify, Inc., 101 2nd Street, San Francisco, CA 94105, États-Unis (netlify.com)</span></li>
     </ul>
@@ -1409,8 +1430,10 @@ dialog::backdrop{background:var(--backdrop)}
   <div class="dlg">
     <button class="icon-btn close" type="button" data-close aria-label="Fermer"><svg class="i"><use href="#i-close"/></svg></button>
     <h2 id="dlg-privacy-title">Confidentialité</h2>
-    <p>Ce site ne dépose aucun cookie, n’utilise aucun outil de mesure d’audience et n’enregistre aucune donnée personnelle. Ses polices de caractères sont hébergées sur le site lui-même&nbsp;: votre visite n’est transmise à aucun service tiers. Seul votre choix de thème (clair ou sombre) est retenu, dans votre propre navigateur.</p>
-    <p>Le formulaire de contact prépare un e-mail dans votre propre messagerie&nbsp;: rien n’est transmis par le site lui-même. Les informations que vous envoyez par e-mail sont utilisées uniquement pour vous répondre.</p>
+    <p>Ce site ne dépose aucun cookie et n’utilise aucun outil de mesure d’audience. Ses polices de caractères sont hébergées sur le site lui-même&nbsp;: votre simple visite n’est transmise à aucun service tiers. Seul votre choix de thème (clair ou sombre) est retenu, dans votre propre navigateur.</p>
+    <p>Si vous utilisez le formulaire de contact, les informations saisies (identité, e-mail ou téléphone, message) sont transmises à Céline Delohen par l’hébergeur du site, Netlify, et utilisées uniquement pour répondre à votre demande. Elles ne sont ni vendues ni utilisées à d’autres fins.</p>
+    <p>Vous pouvez demander l’accès, la rectification ou la suppression de vos informations en écrivant à <a data-link="mail" href="mailto:contact.alcyonie@gmail.com">contact.alcyonie@gmail.com</a>. Vous pouvez aussi écrire directement depuis votre messagerie, sans passer par le formulaire.</p>
+    <p>Durée de conservation des messages&nbsp;: <span class="todo">À compléter avec Céline</span></p>
   </div>
 </dialog>
 </div>
@@ -1724,10 +1747,11 @@ const SITE = {
     }, () => { copyStatus.textContent = "Copie impossible ici. Sélectionnez le texte : " + value; });
   }));
 
-  /* 10. Préparer un e-mail (lien mailto, rien n’est envoyé par le site) */
-  const form = $("#composer"), send = $("#composer-send"), subjectEl = $("#composer-subject"), cStatus = $("#composer-status");
+  /* 10. Formulaire de contact : envoi par Netlify Forms (repli : e-mail dans la messagerie) */
+  const form = $("#composer"), send = $("#composer-send"), subjectField = $("#c-subject"), cStatus = $("#composer-status");
   const structureField = $("#structure-field");
-  const identiteInput = $("#c-identite");
+  const identiteInput = $("#c-identite"), emailInput = $("#c-email"), telInput = $("#c-tel");
+  const messageInput = $("#c-message"), consent = $("#c-consent"), submitBtn = $("#composer-submit");
   const STRUCTURE = "Atelier dans ma structure";
   const build = () => {
     const fd = new FormData(form);
@@ -1744,18 +1768,36 @@ const SITE = {
     const { subject, body, sujet } = build();
     structureField.hidden = sujet !== STRUCTURE;
     identiteInput.placeholder = sujet === STRUCTURE ? "Nom, prénom et fonction" : "Nom et prénom";
-    subjectEl.textContent = subject;
+    subjectField.value = subject;
     send.href = "mailto:" + SITE.email + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
   };
-  form.addEventListener("input", refresh);
+  const setErr = (el, on) => { if (el) { if (on) el.setAttribute("aria-invalid", "true"); else el.removeAttribute("aria-invalid"); } };
+  form.addEventListener("input", () => { refresh(); [identiteInput, emailInput, telInput, messageInput].forEach(el => setErr(el, false)); cStatus.classList.remove("err"); });
   form.addEventListener("change", refresh);
-  form.addEventListener("submit", e => e.preventDefault());
-  $("#composer-copy").addEventListener("click", () => {
-    const { subject, body } = build();
-    copyText("À : " + SITE.email + "\nObjet : " + subject + "\n\n" + body).then(
-      () => { cStatus.textContent = "Message copié. Collez-le dans un e-mail à " + SITE.email + "."; },
-      () => { cStatus.textContent = "Copie impossible ici. Écrivez directement à " + SITE.email + "."; }
-    );
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    const fail = (msg, el) => { cStatus.classList.add("err"); cStatus.textContent = msg; if (el) { setErr(el, true); el.focus(); } };
+    cStatus.classList.remove("err"); cStatus.textContent = "";
+    const email = emailInput.value.trim(), tel = telInput.value.trim();
+    if (!identiteInput.value.trim()) return fail("Merci d’indiquer votre nom.", identiteInput);
+    if (!email && !tel) return fail("Merci d’indiquer un e-mail ou un téléphone pour que Céline puisse vous répondre.", emailInput);
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return fail("Cette adresse e-mail semble incomplète.", emailInput);
+    if (!messageInput.value.trim()) return fail("Merci d’écrire quelques mots.", messageInput);
+    if (!consent.checked) return fail("Merci de cocher la case pour que votre message soit transmis.", consent);
+    refresh();
+    const label = $("span", submitBtn), txt = label.textContent;
+    submitBtn.disabled = true; label.textContent = "Envoi en cours…";
+    try {
+      const res = await fetch("/", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: new URLSearchParams(new FormData(form)).toString() });
+      if (!res.ok) throw new Error(res.status);
+      const done = document.createElement("div");
+      done.className = "thanks"; done.tabIndex = -1; done.setAttribute("role", "status");
+      done.innerHTML = '<h3>Merci, votre message est bien parti.</h3><p class="hint">Céline le reçoit directement et vous répondra. Si votre demande est urgente, vous pouvez aussi l’appeler au <a data-link="tel" href="tel:' + SITE.telephoneIntl + '">' + SITE.telephone + '</a>.</p>';
+      form.replaceWith(done); done.focus();
+    } catch (_) {
+      submitBtn.disabled = false; label.textContent = txt;
+      fail("L’envoi n’a pas abouti. Réessayez dans un instant, ou écrivez depuis votre messagerie avec le bouton ci-dessus, ou appelez le " + SITE.telephone + ".");
+    }
   });
   $$("[data-subject]").forEach(a => a.addEventListener("click", () => {
     const radio = $$('input[name="sujet"]', form).find(r => r.value === a.dataset.subject);
